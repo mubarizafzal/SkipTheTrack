@@ -7,6 +7,6 @@ class Hobo {
   
     this.position = pos;
   }
-
+  
 
 }

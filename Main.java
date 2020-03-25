@@ -43,13 +43,21 @@
  */
 
 // every S seconds generate new message
+
+
 // send stack, receive stack, delay generator
+
+import java.util.*;
 
 class Main {
 
   public static void main (String args[]) {
   
     System.out.println("hellooo");
+    
+    
+    Simulation mySim = new Simulation(12.5, 10, 25.5, 28.5, 6);
+    
     
   
   
