@@ -11,7 +11,7 @@ class Simulation {
 
   private double Svalue;
   
-  private ArrayList<Boolean> tracks; // change to arraylist?
+  private ArrayList<Boolean> tracks; // Track objects instead of boolean
   
   private double avgDuration;
   
