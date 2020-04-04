@@ -11,32 +11,36 @@ class Simulation {
 
   private double Svalue;
   
-  private ArrayList<Boolean> tracks; // Track objects instead of boolean
+  private ArrayList<Track> tracks; // Track objects instead of boolean
   
+  private ArrayList<Hobo> hobos;
+
+  /*
   private double avgDuration;
   
   private double avgDelay;
   
   private int numHobos;
 
-  public Simulation (double Svalue, int numTracks, double avgDuration, double avgDelay, int numHobos) {
+  private int numTrains;
+
+  */
+
+  public Simulation (double Svalue, int numTracks, int numTrains, double avgDuration, double avgDelay, int numHobos) {
   
-    ArrayList<Boolean> tracks = new ArrayList<Boolean>();
-    
     
     for (int i = 0; i < numTracks; i++) {
-      tracks.add(false);
+      this.tracks.add(new Track(i, avgDuration, avgDelay, numTrains));
+    }
+
+    for (int i = 0; i < numHobos; i++) {
+      this.hobos.add(new Hobo(i));
     }
     
     this.cycleNum = 0;
-    this.tracks = tracks;
     this.Svalue = Svalue;
-    this.avgDuration = avgDuration;
-    this.avgDelay = avgDelay;
     
     
-  
-  
   }
   
   // this function will make the calculations, move the simulation one cycle forward
@@ -44,6 +48,17 @@ class Simulation {
     
     
   
+  }
+
+  public void generateMessages () {
+    // if chance to send message
+    // 
+  }
+
+  // sets the safety value for each track for the given time
+  public void setSafety (double currentTime) {
+
+    
   }
 
 

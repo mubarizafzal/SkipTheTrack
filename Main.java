@@ -57,7 +57,7 @@ class Main {
     System.out.println("hellooo");
 
 
-    Simulation mySim = new Simulation(12.5, 10, 25.5, 28.5, 6);
+    Simulation mySim = new Simulation(12.5, 10, 40, 25.5, 28.5, 6);
 
     // don't need to save averages in local track objects
     Track t = new Track(9, 10, 10, 50);
