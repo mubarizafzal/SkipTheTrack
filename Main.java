@@ -44,12 +44,6 @@
 
 // every S seconds generate new message
 
-
-// send stack, receive stack, delay generator
-
-import java.util.ArrayList;
-import java.util.Collections;
-
 public class Main {
 
   public static void main (String args[]) {
@@ -57,13 +51,7 @@ public class Main {
     System.out.println("hellooo");
 
 
-    Simulation mySim = new Simulation(12.5, 10, 40, 25.5, 28.5, 6);
-
-    // don't need to save averages in local track objects
-    Track t = new Track(9, 10, 10, 50);
-
-    System.out.println(t.getSchedule());
-
+    Simulation mySim = new Simulation(12.5, 10, 40, 25.5, 28.5, 16);
 
 
 
