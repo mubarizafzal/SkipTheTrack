@@ -2,7 +2,7 @@ import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Random;
 
-class Track {
+public class Track {
 
   private int trackNum;
   private ArrayList<ArrayList<Double>> schedule = new ArrayList<>();

@@ -1,6 +1,6 @@
 
 
-class Message {
+public class Message {
   
   private int fromTrack;
   private double delay;
