@@ -51,7 +51,7 @@ public class Main {
     System.out.println("hellooo");
 
 
-    Simulation mySim = new Simulation(12.5, 10, 40, 25.5, 28.5, 16);
+    Simulation mySim = new Simulation(15, 10, 40, 25.5, 28.5, 16);
 
 
 
