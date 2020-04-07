@@ -4,13 +4,11 @@ public class Message {
   
   private int origin;
   private double arrival;
-  private boolean isSafe = false;
   
   
-  public Message (int from, double delay, double sentAt, boolean safety) {
+  public Message (int from, double delay, double sentAt) {
     this.arrival = sentAt + delay;
     this.origin = from;
-    this.isSafe = safety;
   }
 
   public double getArrival () {

@@ -11,6 +11,10 @@ public class Hobo {
   public int getPos () {
     return position;
   }
+
+  public void setPos (int newPos) {
+    this.position = newPos;
+  }
   
 
 }

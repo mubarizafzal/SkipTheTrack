@@ -22,6 +22,7 @@ public class Track {
 
   private ArrayList<ArrayList<Double>> makeSchedule (ArrayList<Double> occupiedTimes, ArrayList<Double> delayTimes, int size) {
 
+    //System.out.println(occupiedTimes);
     ArrayList<ArrayList<Double>> schedule = new ArrayList<>(size);
     double arrival = 0;
     for (int i = 0; i < size; i++) {
@@ -29,7 +30,7 @@ public class Track {
       
       ArrayList<Double> duration = new ArrayList<Double>(2);
       duration.add(arrival);
-      duration.add(arrival + occupiedTimes.get(i));
+      duration.add(arrival + occupiedTimes.get(size - 1 - i));
 
       schedule.add(duration);
       arrival = arrival + occupiedTimes.get(i);

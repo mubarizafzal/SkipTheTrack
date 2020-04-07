@@ -21,13 +21,14 @@ public class Simulation {
 
   private ArrayList<Message> messageStack;
 
-  public Simulation (double Svalue, int numTracks, int numTrains, double avgDuration, double avgDelay, int numHobos) {
+  public Simulation (double Svalue, int numTracks, int numTrains, double avgOccupation, double avgDelay, int numHobos) {
   
     this.tracks = new ArrayList<Track>(numTracks);
     
     for (int i = 0; i < numTracks; i++) {
-      this.tracks.add(new Track(i, avgDuration, avgDelay, numTrains));
+      this.tracks.add(new Track(i, avgOccupation, avgDelay, numTrains));
     }
+
 
     this.hobos = new ArrayList<Hobo>(numHobos);
 
@@ -52,78 +53,149 @@ public class Simulation {
     
     ArrayList<Integer> whitelist = new ArrayList<Integer>();
     Random random = new Random();
-    int jumpTo = random.nextInt(this.tracks.size());
-
+    
     for (int i = 0; i < this.tracks.size(); i++) {
       whitelist.add(i);
     }
 
+    ArrayList<Integer> temp = new ArrayList<Integer>(1);
+    temp.add(this.currentPos);
+    whitelist.removeAll(temp);
+
     this.generateMessages();
-    
-    for (Message each: messageStack) {
+
+    for (Message each: this.messageStack) {  // removeall
       if (each.getArrival() <= currentTime) {
-        whitelist.remove(each.getOrigin()); // remove the track from whitelist
-        messageStack.remove(each);
+        ArrayList<Integer> num = new ArrayList<Integer>(1);
+        num.add(each.getOrigin());
+        whitelist.removeAll(num); // remove the track from whitelist
       }
     }
 
-    int tryTrack = 0;
+    final double cT = currentTime;
 
-    while (this.tracks.size() - tryTrack != 0) {
+    this.messageStack.removeIf(n -> (n.getArrival() <= cT));
 
-      // go to a track from the whitelist if possible, else try tracks in sequence
+
+    int tryTrack = 0; // for testing
+
+    System.out.println("Current Cycle: " + this.cycleNum + " On Track: " + this.currentPos + " Health: " + this.mainHealth);
+
+    while (true) {
+
       if (whitelist.size() > 0) {
-        jumpTo = whitelist.remove(random.nextInt(whitelist.size()));
-      } else {
+
+        tryTrack = whitelist.remove(random.nextInt(whitelist.size()));
+
+        if (persentDuring(this.tracks.get(tryTrack), currentTime)) {
         
-        jumpTo = tryTrack;
+          System.out.println(" - Collision! Track " + tryTrack + " was occupied.          At time: " + currentTime + " seconds. Health -5."); // hit occupied track
+          
+          this.mainHealth -= 5;
+  
+          if (this.mainHealth <= 0) {
+            return false;
+          }
+
+          // keep trying, next whitelist track
+
+        } else {
+
+          double arrives = arrivalDuring(this.tracks.get(tryTrack), currentTime, endTime);
+        
+          if (arrives < 0) { // -1 if you don't hit anything
+          
+            this.currentPos = tryTrack;
+            this.cycleNum++;
+            return true;
+
+            // you got out !
+          
+          } else {
+
+            System.out.println(" - Collision! Track " + tryTrack + " had an incoming train. At time: " + currentTime + " seconds. Health -20.");
+            
+            // hit incoming train !!
+            this.mainHealth -= 20;
+
+            if (this.mainHealth <= 0) {
+              return false;
+            }
+
+            currentTime = arrives;
+          }
+        }  
+      } else {
+        break;
+      }
+    }
+
+    // only get here after whitelist is exhausted
+    tryTrack = 0;
+
+    while (true) {
+
+      // dont try the track we're on
+      if (tryTrack == this.currentPos) {
         tryTrack++;
       }
 
-      // present during
+      if (persentDuring(this.tracks.get(tryTrack), currentTime)) {
+        
+        System.out.println(" - Collision! Track " + tryTrack + " was occupied.          At time: " + currentTime + " seconds. Health -5."); // hit occupied track
+        
+        this.mainHealth -= 40;
 
-      if (persentDuring(this.tracks.get(jumpTo), currentTime)) {
-        
-        // hit occupied track
-        
-        continue;
-      
+        if (this.mainHealth <= 0) {
+          return false;
+        }
+
+        // keep trying, next whitelist track
+
       } else {
 
-        double arrives = arrivalDuring(this.tracks.get(jumpTo), currentTime, endTime);
+        double arrives = arrivalDuring(this.tracks.get(tryTrack), currentTime, endTime);
       
         if (arrives < 0) { // -1 if you don't hit anything
         
-          break;
+          this.currentPos = tryTrack;
+          this.cycleNum++;
+          return true;
+
+          // you got out !
         
         } else {
-  
-          // hit incoming train !!
+
+          System.out.println(" - Collision! Track " + tryTrack + " had an incoming train. At time: " + currentTime + " seconds. Health -20.");
           
+          this.mainHealth -= 60;
+
+          if (this.mainHealth <= 0) {
+            return false;
+          }
+
+          currentTime = arrives;
           tryTrack = 0;
-          currentTime = arrives; 
         }
       }
+      tryTrack++;
+
+      if (tryTrack == this.tracks.size()) {
+        break;
+      }
+
     }
 
-    // if don't find track
-    if (tryTrack == tracks.size()) {
-      return false;
-    }
-
-    this.currentPos = jumpTo;
-    return true;
-
-    // exit if health is gone
-    // logging movement
-    // shuffle hobos
-    // what is the track at the end of the cycle?
-    // damage, rerun cycle if hit by train before S is over
-
-
-    
-    
+    System.out.println("No where to go!");
+    return false;
   
+  }
+
+  public void shuffleHobos () {
+    Random random = new Random();
+    for (Hobo each: this.hobos) {
+      each.setPos(random.nextInt(hobos.size()));
+    }
   }
 
   public boolean persentDuring (Track track, double time) {
@@ -153,9 +225,8 @@ public class Simulation {
     return this.messageStack;
   }
 
-  public void generateMessages () {
-    // if chance to send message
-    //
+  public void generateMessages () {  // false messages?
+
     Random random = new Random(); 
     for (int i = 0; i < this.hobos.size(); i++) {
       
@@ -166,20 +237,11 @@ public class Simulation {
         
         
         // change truthiness of message
-        this.messageStack.add(new Message(this.hobos.get(i).getPos(), delay, sentAt, true));
+        this.messageStack.add(new Message(this.hobos.get(i).getPos(), delay, sentAt));
       }
     }
     Collections.sort(messageStack, new MessageComparator());
-
   }
-
-  // sets the safety value for each track for the given time - remove?
-  public void setSafety (double currentTime) {
-
-    
-  }
-
-
 
 }
 
