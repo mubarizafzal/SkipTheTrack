@@ -1,5 +1,3 @@
-import java.util.concurrent.TimeUnit;
-
 /**
  * This program is a simulator that shows how long the main hobo can survive jumping from track to track
  * 
@@ -8,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
   public static void main (String args[]) {
-
 
 
     // double Svalue, int numTracks, int numTrains, double avgDuration, double avgDelay, int numHobos
@@ -23,17 +20,6 @@ public class Main {
         break;
       
       }
-      
-      try {
-        
-        //TimeUnit.MILLISECONDS.sleep(1000); // sleep for 1 second to make the simulation slower
-        //TimeUnit.MILLISECONDS.sleep(500); // 500 milliseconds is half a second  
-
-      } catch (Exception e) {  
-        e.printStackTrace();
-      }
-      
-    
     }
 
     mySim.resetSim();
@@ -46,17 +32,6 @@ public class Main {
         break;
       
       }
-      
-      try {
-        
-        //TimeUnit.MILLISECONDS.sleep(1000); // sleep for 1 second to make the simulation slower
-        //TimeUnit.MILLISECONDS.sleep(500); // 500 milliseconds is half a second  
-
-      } catch (Exception e) {  
-        e.printStackTrace();
-      }
-      
-    
     }
   }
 }
